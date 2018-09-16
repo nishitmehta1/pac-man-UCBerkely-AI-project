@@ -73,30 +73,63 @@ def tinyMazeSearch(problem):
     return  [s, s, w, s, w, w, s, w]
 
 def depthFirstSearch(problem):
-    """
-    Search the deepest nodes in the search tree first.
-
-    Your search algorithm needs to return a list of actions that reaches the
-    goal. Make sure to implement a graph search algorithm.
-
-    To get started, you might want to try some of these simple commands to
-    understand the search problem that is being passed in:
-
-    print "Start:", problem.getStartState()
-    print "Is the start a goal?", problem.isGoalState(problem.getStartState())
-    print "Start's successors:", problem.getSuccessors(problem.getStartState())
-    """
     "*** YOUR CODE HERE ***"
-    print "Start:", problem.getStartState()
-    print "Is the start a goal?", problem.isGoalState(problem.getStartState())
-    print "Start's successors:", problem.getSuccessors(problem.getStartState())
-    
+    # print "Start:", problem.getStartState()
+    # a, b = problem.getStartState()
+    # print a
+    # print b
+    # print "Is the start a goal?", problem.isGoalState(problem.getStartState())
+    # print "Start's successors:", problem.getSuccessors(problem.getStartState())
+    movements = util.Stack()
+    Visited = []
+    movements.push((problem.getStartState(), []))
+    Visited.append(problem.getStartState())
+    # a, b = movements.pop()
+    # print problem.getSuccessors(a)
+    j = 0
+    while movements.isEmpty() == 0:
+        j = j + 1
+        current_state, actions = movements.pop()
+        for i in problem.getSuccessors(current_state):
+            temp_state, n_direction = i[0], i[1]
+            if j==1:
+                print actions
+            if temp_state not in Visited:
+                if problem.isGoalState(temp_state):
+                    return actions + [n_direction]
+                else:
+                    # print actions
+                    movements.push((temp_state, actions + [n_direction]))
+                    Visited.append(temp_state)
 
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
+    movements = util.Queue()
+    Visited = []
+    movements.push((problem.getStartState(), []))
+    Visited.append(problem.getStartState())
+    # a, b = movements.pop()
+    # print problem.getSuccessors(a)
+    j = 0
+    while movements.isEmpty() == 0:
+        j = j + 1
+        current_state, actions = movements.pop()
+        for i in problem.getSuccessors(current_state):
+            temp_state, n_direction = i[0], i[1]
+            if j==1:
+                print actions
+            if temp_state not in Visited:
+                if problem.isGoalState(temp_state):
+                    return actions + [n_direction]
+                else:
+                    # print actions
+                    movements.push((temp_state, actions + [n_direction]))
+                    Visited.append(temp_state)
+
+
     util.raiseNotDefined()
 
 def uniformCostSearch(problem):
