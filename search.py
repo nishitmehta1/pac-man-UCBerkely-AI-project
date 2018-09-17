@@ -129,12 +129,33 @@ def breadthFirstSearch(problem):
                     movements.push((temp_state, actions + [n_direction]))
                     Visited.append(temp_state)
 
-
     util.raiseNotDefined()
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
+    from util import Queue,PriorityQueue
+    movements = PriorityQueue()                    
+    movements.push(problem.getStartState(),0)
+    path=[]                                      
+    visited = []                                 
+    temp_path=[]                                 
+    main_path=PriorityQueue()
+    current_state = movements.pop()
+    while not problem.isGoalState(current_state):
+        if current_state not in visited:
+            visited.append(current_state)
+            successors = problem.getSuccessors(current_state)
+            for child,direction,cost in successors:
+                temp_path = path + [direction]
+                cost = problem.getCostOfActions(temp_path)
+                if child not in visited:
+                    movements.push(child, cost)
+                    main_path.push(temp_path, cost)
+        current_state = movements.pop()
+        path = main_path.pop()    
+    return path
+
     util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
@@ -147,6 +168,28 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
+    from util import Queue,PriorityQueue
+    movements = PriorityQueue()                    
+    movements.push(problem.getStartState(),0)
+    path=[]                                      
+    visited = []                                 
+    temp_path=[]                                 
+    main_path=PriorityQueue()
+    current_state = movements.pop()
+    while not problem.isGoalState(current_state):
+        if current_state not in visited:
+            visited.append(current_state)
+            successors = problem.getSuccessors(current_state)
+            for successor,way,cost in successors:
+                temp_path = path + [way]
+                cost = problem.getCostOfActions(temp_path) + heuristic(successor, problem)
+                if successor not in visited:
+                    movements.push(successor, cost)
+                    main_path.push(temp_path, cost)
+        current_state = movements.pop()
+        path = main_path.pop()    
+    return path
+
     util.raiseNotDefined()
 
 
