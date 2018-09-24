@@ -18,15 +18,15 @@ Pacman agents (in searchAgents.py).
 """
 
 import util
+import sys
+from time import sleep
 
 class SearchProblem:
     """
     This class outlines the structure of a search problem, but doesn't implement
     any of the methods (in object-oriented terminology: an abstract class).
-
     You do not need to change anything in this class, ever.
     """
-
     def getStartState(self):
         """
         Returns the start state for the search problem.
@@ -73,61 +73,61 @@ def tinyMazeSearch(problem):
     return  [s, s, w, s, w, w, s, w]
 
 def depthFirstSearch(problem):
+    from util import Stack
     "*** YOUR CODE HERE ***"
     # print "Start:", problem.getStartState()
     # a, b = problem.getStartState()
+
+    #XXXXXXXXXXXXXX TEST XXXXXXXXXXXXXX#
     # print a
     # print b
     # print "Is the start a goal?", problem.isGoalState(problem.getStartState())
     # print "Start's successors:", problem.getSuccessors(problem.getStartState())
-    movements = util.Stack()
-    Visited = []
-    movements.push((problem.getStartState(), []))
-    Visited.append(problem.getStartState())
-    # a, b = movements.pop()
-    # print problem.getSuccessors(a)
-    j = 0
-    while movements.isEmpty() == 0:
-        j = j + 1
-        current_state, actions = movements.pop()
-        for i in problem.getSuccessors(current_state):
-            temp_state, n_direction = i[0], i[1]
-            if j==1:
-                print actions
-            if temp_state not in Visited:
-                if problem.isGoalState(temp_state):
-                    return actions + [n_direction]
-                else:
-                    # print actions
-                    movements.push((temp_state, actions + [n_direction]))
-                    Visited.append(temp_state)
+    #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX#
+    movements = Stack()                
+    movements.push(problem.getStartState())
+    path = []                         
+    main_path = Stack()           
+    visited = []                    
+    this_state = movements.pop()
+    while not problem.isGoalState(this_state):
+        if this_state not in visited:
+            visited.append(this_state)
+            next_move = problem.getSuccessors(this_state)
+            for child,direction,cost in next_move:
+                movements.push(child)
+                tempPath = path + [direction]
+                main_path.push(tempPath)
+        this_state = movements.pop()
+        path = main_path.pop()
+    return path
 
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    movements = util.Queue()
-    Visited = []
-    movements.push((problem.getStartState(), []))
-    Visited.append(problem.getStartState())
-    # a, b = movements.pop()
-    # print problem.getSuccessors(a)
-    j = 0
-    while movements.isEmpty() == 0:
-        j = j + 1
-        current_state, actions = movements.pop()
-        for i in problem.getSuccessors(current_state):
-            temp_state, n_direction = i[0], i[1]
-            if j==1:
-                print actions
-            if temp_state not in Visited:
-                if problem.isGoalState(temp_state):
-                    return actions + [n_direction]
-                else:
-                    # print actions
-                    movements.push((temp_state, actions + [n_direction]))
-                    Visited.append(temp_state)
+
+    from util import Queue
+    main_queue = util.Queue()                        
+    main_queue.push(problem.getStartState())
+    visited = []                            
+    temp=[]                             
+    path=[]                                  
+    main_path=Queue()                   
+    current_state = main_queue.pop()
+    while not problem.isGoalState(current_state):
+        if current_state not in visited:
+            visited.append(current_state)    
+            successors = problem.getSuccessors(current_state)
+            for child,direction,cost in successors:
+                main_queue.push(child)
+                temp = path + [direction]
+                main_path.push(temp)
+        current_state = main_queue.pop()
+        path = main_path.pop()
+        
+    return path
 
     util.raiseNotDefined()
 
